@@ -1,17 +1,56 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    <ClInclude Include="Card.h">
+      <Filter>Card</Filter>
+    </ClInclude>
+    <ClInclude Include="Context.h">
+      <Filter>Context</Filter>
+    </ClInclude>
+    <ClInclude Include="TLV.h">
+      <Filter>TLV</Filter>
+    </ClInclude>
+    <ClInclude Include="Tag.h">
+      <Filter>TLV\Tag</Filter>
+    </ClInclude>
+    <ClInclude Include="Length.h">
+      <Filter>TLV\Length</Filter>
+    </ClInclude>
+    <ClInclude Include="TLVList.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Card.cpp">
+      <Filter>Card</Filter>
+    </ClCompile>
+    <ClCompile Include="Context.cpp">
+      <Filter>Context</Filter>
+    </ClCompile>
+    <ClCompile Include="TLV.cpp">
+      <Filter>TLV</Filter>
+    </ClCompile>
+    <ClCompile Include="Tag.cpp">
+      <Filter>TLV\Tag</Filter>
+    </ClCompile>
+    <ClCompile Include="Length.cpp">
+      <Filter>TLV\Length</Filter>
+    </ClCompile>
+    <ClCompile Include="TLVList.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Card">
+      <UniqueIdentifier>{60271f00-4daa-4e24-b645-a0c450df59a7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    <Filter Include="Context">
+      <UniqueIdentifier>{1d0fb2f4-1cf7-4b69-95c1-323c28bd4916}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    <Filter Include="TLV">
+      <UniqueIdentifier>{08f5aec5-bdf0-4f67-9469-157b25828abe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TLV\Tag">
+      <UniqueIdentifier>{63776038-be86-4473-be89-a0908a7795d3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TLV\Length">
+      <UniqueIdentifier>{c291198b-9607-47d3-a51f-fa56bfaec435}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
