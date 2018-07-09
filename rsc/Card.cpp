@@ -21,6 +21,10 @@ Card::Card(Context const &context, LPCTSTR szReader)
     fetch_status();
 }
 
+Card::Card(Context const &context, std::wstring const &reader)
+    : Card(context, reader.c_str())
+{}
+
 Card::~Card() {
     SCardDisconnect(hCard_, SCARD_RESET_CARD);
 }

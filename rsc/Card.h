@@ -13,6 +13,7 @@ namespace rsc {
     class Card {
     public:
         Card(Context const &context, LPCTSTR szReader);
+        Card(Context const &context, std::wstring const &reader);
         ~Card();
 
         LPCSCARD_IO_REQUEST pci() const noexcept;
