@@ -16,7 +16,18 @@
     <ClInclude Include="Length.h">
       <Filter>TLV\Length</Filter>
     </ClInclude>
-    <ClInclude Include="TLVList.h" />
+    <ClInclude Include="cAPDU.h">
+      <Filter>APDU</Filter>
+    </ClInclude>
+    <ClInclude Include="rAPDU.h">
+      <Filter>APDU</Filter>
+    </ClInclude>
+    <ClInclude Include="TLVList.h">
+      <Filter>TLV</Filter>
+    </ClInclude>
+    <ClInclude Include="Readers.h">
+      <Filter>Readers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Card.cpp">
@@ -34,7 +45,18 @@
     <ClCompile Include="Length.cpp">
       <Filter>TLV\Length</Filter>
     </ClCompile>
-    <ClCompile Include="TLVList.cpp" />
+    <ClCompile Include="cAPDU.cpp">
+      <Filter>APDU</Filter>
+    </ClCompile>
+    <ClCompile Include="rAPDU.cpp">
+      <Filter>APDU</Filter>
+    </ClCompile>
+    <ClCompile Include="TLVList.cpp">
+      <Filter>TLV</Filter>
+    </ClCompile>
+    <ClCompile Include="Readers.cpp">
+      <Filter>Readers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Card">
@@ -51,6 +73,12 @@
     </Filter>
     <Filter Include="TLV\Length">
       <UniqueIdentifier>{c291198b-9607-47d3-a51f-fa56bfaec435}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="APDU">
+      <UniqueIdentifier>{b31b041f-7aeb-446b-a872-86ddc0ccd3fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Readers">
+      <UniqueIdentifier>{522c2308-edbe-47df-aa71-add53608eb44}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

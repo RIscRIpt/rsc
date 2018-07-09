@@ -9,7 +9,7 @@ namespace rsc {
         Context(DWORD dwScope);
         ~Context();
 
-        inline SCARDCONTEXT get() const noexcept { return hContext_; }
+        inline SCARDCONTEXT handle() const noexcept { return hContext_; }
 
     private:
         SCARDCONTEXT hContext_;

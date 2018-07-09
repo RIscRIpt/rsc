@@ -7,17 +7,18 @@
 
 namespace rsc {
 
-    class TLV
-    {
+    class TLVList;
+
+    class TLV {
     public:
-        TLV(unsigned char const *buffer);
+        explicit TLV(unsigned char const *buffer);
 
         inline size_t size() const noexcept { return tag_.size() + length_.size() + value_.size(); }
         inline Tag const& tag() const noexcept { return tag_; }
         inline size_t length() const noexcept { return length_.value(); }
         inline Length const& Length() const noexcept { return length_; }
         inline std::vector<unsigned char> value() const noexcept { return value_; }
-        TLV value_as_tlv() const;
+        TLVList value_as_tlv_list() const;
 
     private:
         Tag tag_;

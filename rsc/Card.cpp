@@ -9,7 +9,7 @@ Card::Card(Context const &context, LPCTSTR szReader)
 {
     if (
         auto result = SCardConnect(
-            context.get(),
+            context.handle(),
             szReader,
             SCARD_SHARE_EXCLUSIVE,
             SCARD_PROTOCOL_T0 | SCARD_PROTOCOL_T1,
@@ -18,6 +18,7 @@ Card::Card(Context const &context, LPCTSTR szReader)
         ); result != SCARD_S_SUCCESS
         )
         throw std::system_error(result, std::system_category());
+    fetch_status();
 }
 
 Card::~Card() {
@@ -37,20 +38,75 @@ LPCSCARD_IO_REQUEST Card::pci() const noexcept {
     }
 }
 
-std::vector<BYTE> Card::transmit() {
-    std::vector<BYTE> buffer(256);
-    DWORD length = buffer.size();
+void Card::warm_reset() {
+    reset(SCARD_RESET_CARD);
+}
+
+void Card::cold_reset() {
+    reset(SCARD_UNPOWER_CARD);
+}
+
+void Card::reset(DWORD dwInitialization) {
+    if (
+        auto result = SCardReconnect(
+            hCard_,
+            SCARD_SHARE_EXCLUSIVE,
+            SCARD_PROTOCOL_T0 | SCARD_PROTOCOL_T1,
+            dwInitialization,
+            &dwActiveProtocol_
+        ); result != SCARD_S_SUCCESS
+        )
+        throw std::system_error(result, std::system_category());
+}
+
+rAPDU Card::transmit(cAPDU const &capdu) {
+    rAPDU rapdu;
+    DWORD actual_length;
     if (
         auto result = SCardTransmit(
             hCard_,
             pci(),
+            capdu.buffer().data(),
+            capdu.buffer().size(),
             NULL,
-            NULL,
-            NULL,
-            buffer.data(),
-            &length
+            rapdu.buffer().data(),
+            &actual_length
         ); result != SCARD_S_SUCCESS
         )
         throw std::system_error(result, std::system_category());
-    return buffer;
+    rapdu.resize(actual_length);
+    return rapdu;
 }
+
+void Card::fetch_status() {
+    LPTSTR mszReaderNames;
+    DWORD cchReaderLen = SCARD_AUTOALLOCATE;
+    DWORD cbAtrLen;
+    atr_ = std::vector<BYTE>(32);
+    if (
+        auto result = SCardStatus(
+            hCard_,
+            (LPTSTR)&mszReaderNames,
+            &cchReaderLen,
+            &dwState_,
+            &dwActiveProtocol_,
+            atr_.data(),
+            &cbAtrLen
+        ); result != SCARD_S_SUCCESS
+        )
+        throw std::system_error(result, std::system_category());
+
+    atr_.resize(cbAtrLen);
+    atr_.shrink_to_fit();
+
+    readerNames_ = {};
+    for (LPTSTR pReaderName = mszReaderNames; *pReaderName; ) {
+        readerNames_.emplace_back(pReaderName);
+        pReaderName += readerNames_.back().length();
+    }
+    readerNames_.shrink_to_fit();
+
+    if (auto result = SCardFreeMemory(context.handle(), mszReaderNames); result != SCARD_S_SUCCESS)
+        throw std::system_error(result, std::system_category());
+}
+

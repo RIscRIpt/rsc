@@ -1,4 +1,5 @@
 #include "TLV.h"
+#include "TLVList.h"
 
 using namespace rsc;
 
@@ -11,6 +12,6 @@ TLV::TLV(unsigned char const *buffer)
     value_ = std::vector<unsigned char>(value_begin, value_end);
 }
 
-TLV TLV::value_as_tlv() const {
-    return TLV(value_.data());
+TLVList TLV::value_as_tlv_list() const {
+    return TLVList(value_);
 }

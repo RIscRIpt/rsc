@@ -9,7 +9,8 @@ namespace rsc {
     class TLVList
     {
     public:
-        TLVList(std::vector<unsigned char> const &buffer);
+        explicit TLVList(std::vector<unsigned char> const &buffer);
+        TLVList(std::vector<unsigned char>::const_iterator buffer_begin, std::vector<unsigned char>::const_iterator buffer_end);
 
         inline size_t size() const noexcept { return tlvs_.size(); }
         inline TLV const& operator[](size_t index) const { return tlvs_.at(index); }
