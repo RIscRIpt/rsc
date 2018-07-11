@@ -13,6 +13,13 @@ Tag::Tag(unsigned char const *buffer) {
     tag_.shrink_to_fit();
 }
 
+Tag::Tag(uint16_t tag) {
+    if (tag & 0xFF00) {
+        tag_.push_back(static_cast<unsigned char>(tag >> 8));
+    }
+    tag_.push_back(static_cast<unsigned char>(tag & 0xFF));
+}
+
 uintptr_t Tag::number() const noexcept {
     if ((tag_[0] & MASK_TAG_NUMBER_0) != MULTI_BYTE_TAG) {
         return tag_[0] & MASK_TAG_NUMBER_0;

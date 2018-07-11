@@ -25,7 +25,8 @@ namespace rsc {
             Private         = 0b11 << 6,
         };
 
-        Tag(unsigned char const *buffer);
+        explicit Tag(unsigned char const *buffer);
+        Tag(uint16_t tag);
 
         inline Class cls() const noexcept { return static_cast<Class>(tag_[0] & MASK_CLASS); }
         inline bool is_constructed() const noexcept { return tag_[0] & MASK_CONSTRUCTED; }
