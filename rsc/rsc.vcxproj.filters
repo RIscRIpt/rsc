@@ -11,10 +11,10 @@
       <Filter>TLV</Filter>
     </ClInclude>
     <ClInclude Include="Tag.h">
-      <Filter>TLV\Tag</Filter>
+      <Filter>Tag</Filter>
     </ClInclude>
     <ClInclude Include="Length.h">
-      <Filter>TLV\Length</Filter>
+      <Filter>Length</Filter>
     </ClInclude>
     <ClInclude Include="cAPDU.h">
       <Filter>APDU</Filter>
@@ -28,6 +28,12 @@
     <ClInclude Include="Readers.h">
       <Filter>Readers</Filter>
     </ClInclude>
+    <ClInclude Include="TLList.h">
+      <Filter>TL</Filter>
+    </ClInclude>
+    <ClInclude Include="TL.h">
+      <Filter>TL</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Card.cpp">
@@ -40,10 +46,10 @@
       <Filter>TLV</Filter>
     </ClCompile>
     <ClCompile Include="Tag.cpp">
-      <Filter>TLV\Tag</Filter>
+      <Filter>Tag</Filter>
     </ClCompile>
     <ClCompile Include="Length.cpp">
-      <Filter>TLV\Length</Filter>
+      <Filter>Length</Filter>
     </ClCompile>
     <ClCompile Include="cAPDU.cpp">
       <Filter>APDU</Filter>
@@ -57,6 +63,12 @@
     <ClCompile Include="Readers.cpp">
       <Filter>Readers</Filter>
     </ClCompile>
+    <ClCompile Include="TLList.cpp">
+      <Filter>TL</Filter>
+    </ClCompile>
+    <ClCompile Include="TL.cpp">
+      <Filter>TL</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Card">
@@ -68,17 +80,20 @@
     <Filter Include="TLV">
       <UniqueIdentifier>{08f5aec5-bdf0-4f67-9469-157b25828abe}</UniqueIdentifier>
     </Filter>
-    <Filter Include="TLV\Tag">
-      <UniqueIdentifier>{63776038-be86-4473-be89-a0908a7795d3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="TLV\Length">
-      <UniqueIdentifier>{c291198b-9607-47d3-a51f-fa56bfaec435}</UniqueIdentifier>
-    </Filter>
     <Filter Include="APDU">
       <UniqueIdentifier>{b31b041f-7aeb-446b-a872-86ddc0ccd3fb}</UniqueIdentifier>
     </Filter>
     <Filter Include="Readers">
       <UniqueIdentifier>{522c2308-edbe-47df-aa71-add53608eb44}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TL">
+      <UniqueIdentifier>{da9b74be-20a1-4996-93fc-820c4fc243d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Length">
+      <UniqueIdentifier>{c291198b-9607-47d3-a51f-fa56bfaec435}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tag">
+      <UniqueIdentifier>{63776038-be86-4473-be89-a0908a7795d3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

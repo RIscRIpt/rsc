@@ -145,6 +145,8 @@
     <ClInclude Include="rAPDU.h" />
     <ClInclude Include="Readers.h" />
     <ClInclude Include="Tag.h" />
+    <ClInclude Include="TL.h" />
+    <ClInclude Include="TLList.h" />
     <ClInclude Include="TLV.h" />
     <ClInclude Include="TLVList.h" />
   </ItemGroup>
@@ -156,6 +158,8 @@
     <ClCompile Include="rAPDU.cpp" />
     <ClCompile Include="Readers.cpp" />
     <ClCompile Include="Tag.cpp" />
+    <ClCompile Include="TL.cpp" />
+    <ClCompile Include="TLList.cpp" />
     <ClCompile Include="TLV.cpp" />
     <ClCompile Include="TLVList.cpp" />
   </ItemGroup>
