@@ -6,8 +6,7 @@
 
 namespace rsc {
 
-    class TLVList
-    {
+    class TLVList {
     public:
         explicit TLVList(std::vector<unsigned char> const &buffer);
         TLVList(std::vector<unsigned char>::const_iterator buffer_begin, std::vector<unsigned char>::const_iterator buffer_end);
