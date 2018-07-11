@@ -4,8 +4,7 @@
 
 namespace rsc {
 
-    class Length
-    {
+    class Length {
     public:
         enum {
             IS_NUMBER_OF_BYTES = 0x80,

@@ -5,8 +5,7 @@
 
 namespace rsc {
 
-    class Tag
-    {
+    class Tag {
     public:
         enum {
             MASK_CLASS         = 0b11000000,
