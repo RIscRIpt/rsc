@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <cstdint>
 
 namespace rsc {
 
@@ -29,14 +30,17 @@ namespace rsc {
         inline Class cls() const noexcept { return static_cast<Class>(tag_[0] & MASK_CLASS); }
         inline bool is_constructed() const noexcept { return tag_[0] & MASK_CONSTRUCTED; }
         inline bool is_primitive() const noexcept { return !is_constructed(); }
-        inline std::vector<unsigned char> const& tag() const noexcept { return tag_; }
         inline size_t size() const noexcept { return tag_.size(); }
 
         inline bool operator==(Tag const &rhs) { return tag_ == rhs.tag_; }
         inline bool operator!=(Tag const &rhs) { return tag_ != rhs.tag_; }
 
+        inline std::vector<unsigned char> const& bytes() const noexcept { return tag_; }
+
         uintptr_t number() const noexcept;
 
+        uintptr_t value() const noexcept;
+        inline operator uintptr_t() const noexcept { return value(); }
 
     private:
         std::vector<unsigned char> tag_;

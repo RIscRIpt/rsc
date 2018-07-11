@@ -26,3 +26,12 @@ uintptr_t Tag::number() const noexcept {
     }
     return number;
 }
+
+uintptr_t Tag::value() const noexcept {
+    uintptr_t result = 0;
+    for (auto b : tag_) {
+        result <<= 8;
+        result |= b;
+    }
+    return result;
+}
