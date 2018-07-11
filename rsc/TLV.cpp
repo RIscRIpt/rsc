@@ -4,8 +4,7 @@
 using namespace rsc;
 
 TLV::TLV(unsigned char const *buffer)
-    : tag_(buffer)
-    , length_(buffer + tag_.size())
+    : TL(buffer)
 {
     unsigned char const *value_begin = buffer + tag_.size() + length_.size();
     unsigned char const *value_end = value_begin + length_.value();
