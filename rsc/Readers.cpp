@@ -17,7 +17,7 @@ std::vector<std::wstring> const& Readers::fetch()
         auto result = SCardListReaders(
             context.handle(),
             groups,
-            (LPTSTR)mszReaders,
+            (LPTSTR)&mszReaders,
             &cchReaders
             ); result != SCARD_S_SUCCESS
         )
