@@ -9,7 +9,7 @@ namespace rsc {
 
     class rAPDU {
     public:
-        explicit rAPDU(size_t Le = 256);
+        explicit rAPDU(size_t Le = 254);
 
         uint16_t SW() const noexcept;
         uint8_t SW1() const noexcept;

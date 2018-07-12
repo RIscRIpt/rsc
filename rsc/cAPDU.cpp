@@ -18,7 +18,7 @@ cAPDU::cAPDU(unsigned char cla, unsigned char ins, unsigned char p1, unsigned ch
     , INS(ins)
     , P1(p1)
     , P2(p2)
-    , Lc(data.size())
+    , Lc(this->data.size())
     , Le(0)
     , data(data)
 {
@@ -30,7 +30,7 @@ cAPDU::cAPDU(unsigned char cla, unsigned char ins, unsigned char p1, unsigned ch
     , INS(ins)
     , P1(p1)
     , P2(p2)
-    , Lc(data.size())
+    , Lc(this->data.size())
     , Le(0)
     , data(std::move(data))
 {
@@ -42,7 +42,7 @@ cAPDU::cAPDU(unsigned char cla, unsigned char ins, unsigned char p1, unsigned ch
     , INS(ins)
     , P1(p1)
     , P2(p2)
-    , Lc(data.size())
+    , Lc(this->data.size())
     , Le(le)
     , data(data)
 {
@@ -54,7 +54,7 @@ cAPDU::cAPDU(unsigned char cla, unsigned char ins, unsigned char p1, unsigned ch
     , INS(ins)
     , P1(p1)
     , P2(p2)
-    , Lc(data.size())
+    , Lc(this->data.size())
     , Le(le)
     , data(std::move(data))
 {
