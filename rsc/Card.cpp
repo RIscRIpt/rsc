@@ -65,7 +65,7 @@ void Card::reset(DWORD dwInitialization) {
 
 rAPDU Card::transmit(cAPDU const &capdu) {
     rAPDU rapdu;
-    DWORD actual_length;
+    DWORD actual_length = rapdu.buffer().size();
     if (
         auto result = SCardTransmit(
             hCard_,
