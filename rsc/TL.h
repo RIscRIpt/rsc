@@ -5,6 +5,8 @@
 
 #include <vector>
 
+#include <scb/bytes.h>
+
 namespace rsc {
 
     class TL {

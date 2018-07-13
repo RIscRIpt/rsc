@@ -4,6 +4,8 @@
 
 #include <vector>
 
+#include <scb/bytes.h>
+
 namespace rsc {
 
     class TLVList;
@@ -13,11 +15,11 @@ namespace rsc {
         explicit TLV(unsigned char const *buffer);
 
         inline size_t size() const noexcept { return tag_.size() + length_.size() + value_.size(); }
-        inline std::vector<unsigned char> value() const noexcept { return value_; }
+        inline scb::Bytes value() const noexcept { return value_; }
         TLVList value_as_tlv_list() const;
 
     private:
-        std::vector<unsigned char> value_;
+        scb::Bytes value_;
     };
 
 }

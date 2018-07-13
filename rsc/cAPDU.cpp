@@ -13,7 +13,18 @@ cAPDU::cAPDU(unsigned char cla, unsigned char ins, unsigned char p1, unsigned ch
     init_buffer();
 }
 
-cAPDU::cAPDU(unsigned char cla, unsigned char ins, unsigned char p1, unsigned char p2, std::vector<unsigned char> const &data)
+cAPDU::cAPDU(unsigned char cla, unsigned char ins, unsigned char p1, unsigned char p2, unsigned int le)
+    : CLA(cla)
+    , INS(ins)
+    , P1(p1)
+    , P2(p2)
+    , Lc(0)
+    , Le(le)
+{
+    init_buffer();
+}
+
+cAPDU::cAPDU(unsigned char cla, unsigned char ins, unsigned char p1, unsigned char p2, scb::Bytes const &data)
     : CLA(cla)
     , INS(ins)
     , P1(p1)
@@ -25,7 +36,7 @@ cAPDU::cAPDU(unsigned char cla, unsigned char ins, unsigned char p1, unsigned ch
     init_buffer();
 }
 
-cAPDU::cAPDU(unsigned char cla, unsigned char ins, unsigned char p1, unsigned char p2, std::vector<unsigned char> &&data)
+cAPDU::cAPDU(unsigned char cla, unsigned char ins, unsigned char p1, unsigned char p2, scb::Bytes &&data)
     : CLA(cla)
     , INS(ins)
     , P1(p1)
@@ -37,7 +48,7 @@ cAPDU::cAPDU(unsigned char cla, unsigned char ins, unsigned char p1, unsigned ch
     init_buffer();
 }
 
-cAPDU::cAPDU(unsigned char cla, unsigned char ins, unsigned char p1, unsigned char p2, std::vector<unsigned char> const &data, unsigned int le)
+cAPDU::cAPDU(unsigned char cla, unsigned char ins, unsigned char p1, unsigned char p2, scb::Bytes const &data, unsigned int le)
     : CLA(cla)
     , INS(ins)
     , P1(p1)
@@ -49,7 +60,7 @@ cAPDU::cAPDU(unsigned char cla, unsigned char ins, unsigned char p1, unsigned ch
     init_buffer();
 }
 
-cAPDU::cAPDU(unsigned char cla, unsigned char ins, unsigned char p1, unsigned char p2, std::vector<unsigned char> &&data, unsigned int le)
+cAPDU::cAPDU(unsigned char cla, unsigned char ins, unsigned char p1, unsigned char p2, scb::Bytes &&data, unsigned int le)
     : CLA(cla)
     , INS(ins)
     , P1(p1)
@@ -70,11 +81,11 @@ size_t cAPDU::lc_byte_count() {
         return 1;
 }
 
-std::vector<unsigned char> cAPDU::lc_bytes() {
+scb::Bytes cAPDU::lc_bytes() {
     if (lc_byte_count() == 0)
         return {};
 
-    std::vector<unsigned char> bytes(lc_byte_count());
+    scb::Bytes bytes(lc_byte_count());
     if (bytes.size() == 3) {
         bytes[0] = 0;
         bytes[1] = static_cast<unsigned char>(Lc >> 8);
@@ -97,11 +108,11 @@ size_t cAPDU::le_byte_count() {
         return 1;
 }
 
-std::vector<unsigned char> rsc::cAPDU::le_bytes() {
+scb::Bytes rsc::cAPDU::le_bytes() {
     if (le_byte_count() == 0)
         return {};
 
-    std::vector<unsigned char> bytes(le_byte_count());
+    scb::Bytes bytes(le_byte_count());
     if (bytes.size() == 3) {
         bytes[0] = static_cast<unsigned char>(Le >> 8);
         bytes[1] = static_cast<unsigned char>(Le & 0xFF);
@@ -115,7 +126,7 @@ std::vector<unsigned char> rsc::cAPDU::le_bytes() {
 }
 
 void cAPDU::init_buffer() {
-    buffer_ = std::vector<unsigned char>(4 + lc_byte_count() + data.size() + le_byte_count());
+    buffer_ = scb::Bytes(4 + lc_byte_count() + data.size() + le_byte_count());
     buffer_[0] = CLA;
     buffer_[1] = INS;
     buffer_[2] = P1;
@@ -129,4 +140,8 @@ void cAPDU::init_buffer() {
         auto le = le_bytes();
         std::copy(le.begin(), le.end(), buffer_.end() - le.size());
     }
+}
+
+cAPDU cAPDU::SELECT(scb::Bytes name, bool by_name, bool first) {
+    return cAPDU(0x00, 0xA4, by_name ? 0x04 : 0x00, first ? 0x00 : 0x02, std::move(name), 256);
 }

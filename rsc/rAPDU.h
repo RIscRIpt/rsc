@@ -1,9 +1,12 @@
 #pragma once
 
 #include "TLVList.h"
+#include "SW.h"
 
 #include <vector>
 #include <cstdint>
+
+#include <scb/bytes.h>
 
 namespace rsc {
 
@@ -11,17 +14,17 @@ namespace rsc {
     public:
         explicit rAPDU(size_t Le = 254);
 
-        uint16_t SW() const noexcept;
+        SW SW() const noexcept;
         uint8_t SW1() const noexcept;
         uint8_t SW2() const noexcept;
 
         void resize(size_t actual_length);
         TLVList tlv_list() const;
 
-        inline std::vector<unsigned char>& buffer() noexcept { return buffer_; }
+        inline scb::Bytes& buffer() noexcept { return buffer_; }
 
     private:
-        std::vector<unsigned char> buffer_;
+        scb::Bytes buffer_;
     };
 
 }

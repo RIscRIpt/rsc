@@ -3,15 +3,18 @@
 #include <vector>
 #include <optional>
 
+#include <scb/bytes.h>
+
 namespace rsc {
 
     class cAPDU {
     public:
         cAPDU(unsigned char cla, unsigned char ins, unsigned char p1, unsigned char p2);
-        cAPDU(unsigned char cla, unsigned char ins, unsigned char p1, unsigned char p2, std::vector<unsigned char> const &data);
-        cAPDU(unsigned char cla, unsigned char ins, unsigned char p1, unsigned char p2, std::vector<unsigned char> &&data);
-        cAPDU(unsigned char cla, unsigned char ins, unsigned char p1, unsigned char p2, std::vector<unsigned char> const &data, unsigned int le);
-        cAPDU(unsigned char cla, unsigned char ins, unsigned char p1, unsigned char p2, std::vector<unsigned char> &&data, unsigned int le);
+        cAPDU(unsigned char cla, unsigned char ins, unsigned char p1, unsigned char p2, unsigned int le);
+        cAPDU(unsigned char cla, unsigned char ins, unsigned char p1, unsigned char p2, scb::Bytes const &data);
+        cAPDU(unsigned char cla, unsigned char ins, unsigned char p1, unsigned char p2, scb::Bytes &&data);
+        cAPDU(unsigned char cla, unsigned char ins, unsigned char p1, unsigned char p2, scb::Bytes const &data, unsigned int le);
+        cAPDU(unsigned char cla, unsigned char ins, unsigned char p1, unsigned char p2, scb::Bytes &&data, unsigned int le);
 
         cAPDU(cAPDU const &rhs) = default;
         cAPDU(cAPDU &&rhs) = default;
@@ -19,22 +22,24 @@ namespace rsc {
         cAPDU& operator=(cAPDU const &rhs) = default;
         cAPDU& operator=(cAPDU &&rhs) = default;
 
-        std::vector<unsigned char> const data;
+        scb::Bytes const data;
         size_t const Lc, Le;
         unsigned char const CLA, INS, P1, P2;
 
-        inline std::vector<unsigned char> const& buffer() const noexcept { return buffer_; }
+        inline scb::Bytes const& buffer() const noexcept { return buffer_; }
 
         size_t lc_byte_count();
-        std::vector<unsigned char> lc_bytes();
+        scb::Bytes lc_bytes();
 
         size_t le_byte_count();
-        std::vector<unsigned char> le_bytes();
+        scb::Bytes le_bytes();
+
+        static cAPDU SELECT(scb::Bytes name, bool by_name = true, bool first = true);
 
     private:
         void init_buffer();
 
-        std::vector<unsigned char> buffer_;
+        scb::Bytes buffer_;
     };
 
 }

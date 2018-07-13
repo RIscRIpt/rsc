@@ -2,7 +2,7 @@
 
 using namespace rsc;
 
-TLVList::TLVList(std::vector<unsigned char> const &buffer) {
+TLVList::TLVList(scb::Bytes const &buffer) {
     size_t i = 0;
     do {
         tlvs_.emplace_back(&buffer[i]);
@@ -13,7 +13,7 @@ TLVList::TLVList(std::vector<unsigned char> const &buffer) {
     }
 }
 
-TLVList::TLVList(std::vector<unsigned char>::const_iterator buffer_begin, std::vector<unsigned char>::const_iterator buffer_end) {
+TLVList::TLVList(scb::Bytes::const_iterator buffer_begin, scb::Bytes::const_iterator buffer_end) {
     auto i = buffer_begin;
     while (i < buffer_end) {
         tlvs_.emplace_back(&*i);

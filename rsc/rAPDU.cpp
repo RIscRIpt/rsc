@@ -9,7 +9,7 @@ rAPDU::rAPDU(size_t Le)
     buffer_[buffer_.size() - 1] = 0x00;
 }
 
-uint16_t rAPDU::SW() const noexcept {
+SW rAPDU::SW() const noexcept {
     return (SW1() << 8) | SW2();
 }
 

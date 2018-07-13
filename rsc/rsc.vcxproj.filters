@@ -34,6 +34,9 @@
     <ClInclude Include="TL.h">
       <Filter>TL</Filter>
     </ClInclude>
+    <ClInclude Include="SW.h">
+      <Filter>SW</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Card.cpp">
@@ -94,6 +97,9 @@
     </Filter>
     <Filter Include="Tag">
       <UniqueIdentifier>{63776038-be86-4473-be89-a0908a7795d3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SW">
+      <UniqueIdentifier>{bef28ef9-a4ae-46a5-8680-481220bddb2a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

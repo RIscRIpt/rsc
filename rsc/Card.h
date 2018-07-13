@@ -8,6 +8,8 @@
 
 #include <winscard.h>
 
+#include <scb/bytes.h>
+
 namespace rsc {
 
     class Card {
@@ -20,6 +22,7 @@ namespace rsc {
 
         void warm_reset();
         void cold_reset();
+        rAPDU raw_transmit(cAPDU const &capdu);
         rAPDU transmit(cAPDU const &capdu);
         void fetch_status();
 
@@ -27,7 +30,7 @@ namespace rsc {
         inline DWORD protocol() const noexcept { return dwActiveProtocol_; }
         inline DWORD state() const noexcept { return dwState_; }
         inline std::vector<std::wstring> const& reader_names() const noexcept { return readerNames_; }
-        inline std::vector<BYTE> const& atr() const noexcept { return atr_; }
+        inline scb::Bytes const& atr() const noexcept { return atr_; }
 
         Context const &context;
 
@@ -39,7 +42,7 @@ namespace rsc {
         DWORD dwState_;
 
         std::vector<std::wstring> readerNames_;
-        std::vector<BYTE> atr_;
+        scb::Bytes atr_;
     };
 
 }

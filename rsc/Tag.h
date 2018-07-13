@@ -3,6 +3,8 @@
 #include <vector>
 #include <cstdint>
 
+#include <scb/bytes.h>
+
 namespace rsc {
 
     class Tag {
@@ -35,7 +37,7 @@ namespace rsc {
         inline bool operator==(Tag const &rhs) { return tag_ == rhs.tag_; }
         inline bool operator!=(Tag const &rhs) { return tag_ != rhs.tag_; }
 
-        inline std::vector<unsigned char> const& bytes() const noexcept { return tag_; }
+        inline scb::Bytes const& bytes() const noexcept { return tag_; }
 
         uintptr_t number() const noexcept;
 
@@ -43,7 +45,7 @@ namespace rsc {
         inline operator uintptr_t() const noexcept { return value(); }
 
     private:
-        std::vector<unsigned char> tag_;
+        scb::Bytes tag_;
     };
 
 }

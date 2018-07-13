@@ -63,7 +63,7 @@ void Card::reset(DWORD dwInitialization) {
         throw std::system_error(result, std::system_category());
 }
 
-rAPDU Card::transmit(cAPDU const &capdu) {
+rAPDU Card::raw_transmit(cAPDU const & capdu) {
     rAPDU rapdu;
     DWORD actual_length = rapdu.buffer().size();
     if (
@@ -82,11 +82,20 @@ rAPDU Card::transmit(cAPDU const &capdu) {
     return rapdu;
 }
 
+rAPDU Card::transmit(cAPDU const &capdu) {
+    rAPDU result;
+    result = raw_transmit(capdu);
+    if (result.SW().response_bytes_still_available()) {
+        result = raw_transmit(cAPDU(0x00, 0xC0, 0x00, 0x00, result.SW().response_bytes_still_available()));
+    }
+    return result;
+}
+
 void Card::fetch_status() {
     LPTSTR mszReaderNames;
     DWORD cchReaderLen = SCARD_AUTOALLOCATE;
     DWORD cbAtrLen;
-    atr_ = std::vector<BYTE>(32);
+    atr_ = scb::Bytes(32);
     if (
         auto result = SCardStatus(
             hCard_,
