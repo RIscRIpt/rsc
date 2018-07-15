@@ -5,7 +5,7 @@
 
 #include <vector>
 
-#include <scb/bytes.h>
+#include <scb/Bytes.h>
 
 namespace rsc {
 
