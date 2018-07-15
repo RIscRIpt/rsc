@@ -29,3 +29,8 @@ void rAPDU::resize(size_t actual_length) {
 TLVList rAPDU::tlv_list() const {
     return TLVList(buffer_.begin(), buffer_.end() - 2);
 }
+
+std::ostream& operator<<(std::ostream &os, rsc::rAPDU const &rapdu) {
+    rapdu.buffer().print(os, " ");
+    return os;
+}

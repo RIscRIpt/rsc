@@ -3,7 +3,7 @@
 #include <vector>
 #include <optional>
 
-#include <scb/bytes.h>
+#include <scb/Bytes.h>
 
 namespace rsc {
 
@@ -43,3 +43,5 @@ namespace rsc {
     };
 
 }
+
+std::ostream& operator<<(std::ostream &os, rsc::cAPDU const &capdu);

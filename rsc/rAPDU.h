@@ -6,7 +6,7 @@
 #include <vector>
 #include <cstdint>
 
-#include <scb/bytes.h>
+#include <scb/Bytes.h>
 
 namespace rsc {
 
@@ -22,9 +22,12 @@ namespace rsc {
         TLVList tlv_list() const;
 
         inline scb::Bytes& buffer() noexcept { return buffer_; }
+        inline scb::Bytes const& buffer() const noexcept { return buffer_; }
 
     private:
         scb::Bytes buffer_;
     };
 
 }
+
+std::ostream& operator<<(std::ostream &os, rsc::rAPDU const &rapdu);
