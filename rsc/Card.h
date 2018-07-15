@@ -4,11 +4,12 @@
 #include "cAPDU.h"
 #include "rAPDU.h"
 
+#include <iostream>
 #include <vector>
 
 #include <winscard.h>
 
-#include <scb/bytes.h>
+#include <scb/Bytes.h>
 
 namespace rsc {
 
@@ -25,6 +26,8 @@ namespace rsc {
         rAPDU raw_transmit(cAPDU const &capdu);
         rAPDU transmit(cAPDU const &capdu);
         void fetch_status();
+
+        void set_trace(std::ostream *output = &std::cout) noexcept;
 
         inline SCARDHANDLE handle() const noexcept { return hCard_; }
         inline DWORD protocol() const noexcept { return dwActiveProtocol_; }
@@ -43,6 +46,8 @@ namespace rsc {
 
         std::vector<std::wstring> readerNames_;
         scb::Bytes atr_;
+
+        std::ostream *trace_;
     };
 
 }

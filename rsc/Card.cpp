@@ -63,7 +63,9 @@ void Card::reset(DWORD dwInitialization) {
         throw std::system_error(result, std::system_category());
 }
 
-rAPDU Card::raw_transmit(cAPDU const & capdu) {
+rAPDU Card::raw_transmit(cAPDU const &capdu) {
+    if (trace_)
+        *trace_ << "< " << capdu << '\n';
     rAPDU rapdu;
     DWORD actual_length = rapdu.buffer().size();
     if (
@@ -79,6 +81,8 @@ rAPDU Card::raw_transmit(cAPDU const & capdu) {
         )
         throw std::system_error(result, std::system_category());
     rapdu.resize(actual_length);
+    if (trace_)
+        *trace_ << "> " << rapdu << '\n';
     return rapdu;
 }
 
@@ -123,3 +127,6 @@ void Card::fetch_status() {
         throw std::system_error(result, std::system_category());
 }
 
+void Card::set_trace(std::ostream *output) noexcept {
+    trace_ = output;
+}
