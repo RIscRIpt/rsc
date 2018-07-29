@@ -1,5 +1,7 @@
 #include "cAPDU.h"
 
+#include <scb/ByteStream.h>
+
 using namespace rsc;
 
 cAPDU::cAPDU(unsigned char cla, unsigned char ins, unsigned char p1, unsigned char p2)
@@ -72,6 +74,10 @@ cAPDU::cAPDU(unsigned char cla, unsigned char ins, unsigned char p1, unsigned ch
     init_buffer();
 }
 
+cAPDU::cAPDU(scb::Bytes const &buffer)
+    : cAPDU(from_buffer(buffer))
+{}
+
 size_t cAPDU::lc_byte_count() {
     if (Lc == 0)
         return 0;
@@ -125,6 +131,44 @@ scb::Bytes rsc::cAPDU::le_bytes() {
     return bytes;
 }
 
+cAPDU cAPDU::from_buffer(scb::Bytes const &buffer) {
+    scb::Bytes data;
+    size_t Lc, Le;
+    unsigned char CLA, INS, P1, P2;
+
+    scb::ByteStream bs(buffer);
+
+    CLA = bs.next_u8();
+    INS = bs.next_u8();
+    P1 = bs.next_u8();
+    P2 = bs.next_u8();
+    Lc = bs.next_u8();
+    if (Lc & 0x80) {
+        auto lbs = bs.next_bytes(Lc & 0x7F);
+        Lc = 0;
+        for (auto b : lbs) {
+            Lc <<= 8;
+            Lc |= b;
+        }
+    }
+    data = bs.next_bytes(Lc);
+    if (!bs.eob()) {
+        Le = bs.next_u8();
+        if (bs.eob()) {
+            if (Le == 0)
+                Le = 256;
+        } else {
+            do {
+                Le <<= 8;
+                Le |= bs.next_u8();
+            } while (!bs.eob());
+        }
+        return cAPDU(CLA, INS, P1, P2, std::move(data), Le);
+    } else {
+        return cAPDU(CLA, INS, P1, P2, std::move(data));
+    }
+}
+
 void cAPDU::init_buffer() {
     buffer_ = scb::Bytes(4 + lc_byte_count() + data.size() + le_byte_count());
     buffer_[0] = CLA;
@@ -144,6 +188,10 @@ void cAPDU::init_buffer() {
 
 cAPDU cAPDU::SELECT(scb::Bytes name, bool by_name, bool first) {
     return cAPDU(0x00, 0xA4, by_name ? 0x04 : 0x00, first ? 0x00 : 0x02, std::move(name), 256);
+}
+
+cAPDU rsc::cAPDU::GET_RESPONSE(size_t Le) {
+    return cAPDU(0x00, 0xC0, 0x00, 0x00, Le);
 }
 
 std::ostream& operator<<(std::ostream &os, rsc::cAPDU const &capdu) {
