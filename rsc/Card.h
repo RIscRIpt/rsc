@@ -19,6 +19,9 @@ namespace rsc {
         Card(Context const &context, std::wstring const &reader);
         ~Card();
 
+        void connect();
+        void disconnect();
+
         LPCSCARD_IO_REQUEST pci() const noexcept;
 
         void warm_reset();
@@ -36,6 +39,7 @@ namespace rsc {
         inline scb::Bytes const& atr() const noexcept { return atr_; }
 
         Context const &context;
+        LPCTSTR szReader;
 
     private:
         void reset(DWORD dwInitialization);

@@ -6,10 +6,27 @@ using namespace rsc;
 
 Card::Card(Context const &context, LPCTSTR szReader)
     : context(context)
-{
+    , szReader(szReader)
+    , hCard_(NULL)
+    , dwActiveProtocol_(SCARD_PROTOCOL_UNDEFINED)
+    , dwState_(SCARD_UNKNOWN)
+    , trace_(nullptr)
+{}
+
+Card::Card(Context const &context, std::wstring const &reader)
+    : Card(context, reader.c_str())
+{}
+
+Card::~Card() {
+    disconnect();
+}
+
+void Card::connect() {
+    if (hCard_)
+        disconnect();
     if (
         auto result = SCardConnect(
-            context.handle(),
+            context,
             szReader,
             SCARD_SHARE_EXCLUSIVE,
             SCARD_PROTOCOL_T0 | SCARD_PROTOCOL_T1,
@@ -21,12 +38,12 @@ Card::Card(Context const &context, LPCTSTR szReader)
     fetch_status();
 }
 
-Card::Card(Context const &context, std::wstring const &reader)
-    : Card(context, reader.c_str())
-{}
-
-Card::~Card() {
-    SCardDisconnect(hCard_, SCARD_RESET_CARD);
+void Card::disconnect() {
+    if (hCard_) {
+        if (auto result = SCardDisconnect(hCard_, SCARD_RESET_CARD); result != SCARD_S_SUCCESS)
+            throw std::system_error(result, std::system_category());
+        hCard_ = NULL;
+    }
 }
 
 LPCSCARD_IO_REQUEST Card::pci() const noexcept {
@@ -65,7 +82,7 @@ void Card::reset(DWORD dwInitialization) {
 
 rAPDU Card::raw_transmit(cAPDU const &capdu) {
     if (trace_)
-        *trace_ << "< " << capdu << '\n';
+        *trace_ << "< " << capdu << "\r\n";
     rAPDU rapdu;
     DWORD actual_length = rapdu.buffer().size();
     if (
@@ -82,7 +99,7 @@ rAPDU Card::raw_transmit(cAPDU const &capdu) {
         throw std::system_error(result, std::system_category());
     rapdu.resize(actual_length);
     if (trace_)
-        *trace_ << "> " << rapdu << '\n';
+        *trace_ << "> " << rapdu << "\r\n";
     return rapdu;
 }
 
@@ -123,7 +140,7 @@ void Card::fetch_status() {
     }
     readerNames_.shrink_to_fit();
 
-    if (auto result = SCardFreeMemory(context.handle(), mszReaderNames); result != SCARD_S_SUCCESS)
+    if (auto result = SCardFreeMemory(context, mszReaderNames); result != SCARD_S_SUCCESS)
         throw std::system_error(result, std::system_category());
 }
 
