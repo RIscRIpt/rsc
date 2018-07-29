@@ -14,6 +14,12 @@ namespace rsc {
     public:
         explicit rAPDU(size_t Le = 254);
 
+        rAPDU(rAPDU const &other) = default;
+        rAPDU(rAPDU &&other) = default;
+
+        rAPDU& operator=(rAPDU const &rhs) = default;
+        rAPDU& operator=(rAPDU &&rhs) = default;
+
         SW SW() const noexcept;
         uint8_t SW1() const noexcept;
         uint8_t SW2() const noexcept;
