@@ -13,9 +13,10 @@ std::vector<std::wstring> const& Readers::fetch()
 {
     LPTSTR mszReaders = NULL;
     DWORD cchReaders = SCARD_AUTOALLOCATE;
+    readers_.clear();
     if (
         auto result = SCardListReaders(
-            context.handle(),
+            context,
             groups,
             (LPTSTR)&mszReaders,
             &cchReaders
@@ -26,5 +27,6 @@ std::vector<std::wstring> const& Readers::fetch()
         readers_.emplace_back(pReader);
         pReader += readers_.back().length();
     }
+    SCardFreeMemory(context, mszReaders);
     return readers_;
 }
