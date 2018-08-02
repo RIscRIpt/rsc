@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <cstdint>
+#include <unordered_map>
 
 #include <scb/Bytes.h>
 
@@ -44,8 +45,13 @@ namespace rsc {
         uintptr_t value() const noexcept;
         inline operator uintptr_t() const noexcept { return value(); }
 
+        std::wstring const& name() const noexcept;
+
     private:
         scb::Bytes tag_;
+
+        static std::unordered_map<uint16_t, std::wstring> const name_map_;
+        static std::wstring const name_unknown_;
     };
 
 }
