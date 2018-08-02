@@ -10,7 +10,7 @@ namespace rsc {
 
     class TLVList;
 
-    class TLV : TL {
+    class TLV : public TL {
     public:
         explicit TLV(unsigned char const *buffer);
 
