@@ -8,16 +8,15 @@
 
 namespace rsc {
 
-    class TLVList {
+    class TLVList : public std::vector<TLV> {
     public:
-        explicit TLVList(scb::Bytes const &buffer);
+        TLVList(scb::Bytes const &buffer);
         TLVList(scb::Bytes::const_iterator buffer_begin, std::vector<unsigned char>::const_iterator buffer_end);
 
-        inline size_t size() const noexcept { return tlvs_.size(); }
-        inline TLV const& operator[](size_t index) const { return tlvs_.at(index); }
-
     private:
-        std::vector<TLV> tlvs_;
+        static std::vector<TLV> from_bytes(scb::Bytes const &buffer);
+        static std::vector<TLV> from_bytes_range(scb::Bytes::const_iterator buffer_begin, std::vector<unsigned char>::const_iterator buffer_end);
+
     };
 
 }
