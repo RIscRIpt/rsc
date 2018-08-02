@@ -13,6 +13,8 @@ namespace rsc {
     class rAPDU {
     public:
         explicit rAPDU(size_t Le = 254);
+        rAPDU(scb::Bytes const &buffer);
+        rAPDU(scb::Bytes &&buffer);
 
         rAPDU(rAPDU const &other) = default;
         rAPDU(rAPDU &&other) = default;

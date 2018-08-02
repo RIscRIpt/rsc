@@ -9,6 +9,14 @@ rAPDU::rAPDU(size_t Le)
     buffer_[buffer_.size() - 1] = 0x00;
 }
 
+rAPDU::rAPDU(scb::Bytes const &buffer)
+    : buffer_(buffer)
+{}
+
+rAPDU::rAPDU(scb::Bytes &&buffer)
+    : buffer_(std::move(buffer))
+{}
+
 SW rAPDU::SW() const noexcept {
     return (SW1() << 8) | SW2();
 }
