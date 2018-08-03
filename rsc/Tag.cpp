@@ -557,7 +557,7 @@ uintptr_t Tag::value() const noexcept {
 }
 
 std::wstring const& rsc::Tag::name() const noexcept {
-    if (auto name = name_map_.find(value()); name != name_map_.end())
+    if (auto name = name_map_.find(static_cast<uint16_t>(value())); name != name_map_.end())
         return name->second;
     else
         return name_unknown_;

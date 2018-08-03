@@ -84,13 +84,13 @@ rAPDU Card::raw_transmit(cAPDU const &capdu) {
     if (trace_)
         *trace_ << "< " << capdu << "\r\n";
     rAPDU rapdu;
-    DWORD actual_length = rapdu.buffer().size();
+    DWORD actual_length = static_cast<DWORD>(rapdu.buffer().size());
     if (
         auto result = SCardTransmit(
             hCard_,
             pci(),
             capdu.buffer().data(),
-            capdu.buffer().size(),
+            static_cast<DWORD>(capdu.buffer().size()),
             NULL,
             rapdu.buffer().data(),
             &actual_length

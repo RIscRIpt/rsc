@@ -133,7 +133,7 @@ scb::Bytes rsc::cAPDU::le_bytes() {
 
 cAPDU cAPDU::from_buffer(scb::Bytes const &buffer) {
     scb::Bytes data;
-    size_t Lc, Le;
+    unsigned int Lc, Le;
     unsigned char CLA, INS, P1, P2;
 
     scb::ByteStream bs(buffer);
@@ -190,7 +190,7 @@ cAPDU cAPDU::SELECT(scb::Bytes name, bool by_name, bool first) {
     return cAPDU(0x00, 0xA4, by_name ? 0x04 : 0x00, first ? 0x00 : 0x02, std::move(name), 256);
 }
 
-cAPDU rsc::cAPDU::GET_RESPONSE(size_t Le) {
+cAPDU rsc::cAPDU::GET_RESPONSE(unsigned int Le) {
     return cAPDU(0x00, 0xC0, 0x00, 0x00, Le);
 }
 

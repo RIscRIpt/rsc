@@ -7,7 +7,7 @@ namespace rsc {
     class Context {
     public:
         Context(DWORD dwScope);
-        ~Context();
+        ~Context() throw();
 
         Context(Context const &other) = delete;
         Context& operator=(Context const &rhs) = delete;

@@ -10,6 +10,8 @@ Context::Context(DWORD dwScope) {
 }
 
 Context::~Context() {
-    if (auto result = SCardReleaseContext(hContext_); result != SCARD_S_SUCCESS)
-        throw std::system_error(result, std::system_category());
+    if (hContext_ != NULL) {
+        SCardReleaseContext(hContext_);
+        hContext_ = NULL;
+    }
 }
