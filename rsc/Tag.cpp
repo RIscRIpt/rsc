@@ -513,7 +513,7 @@ std::unordered_map<uint16_t, std::wstring> const Tag::name_map_{
     { 0xDF79, L"Dynamic Data Authentication Keys" },
 };
 
-std::wstring const Tag::name_unknown_ = L"Unknown";
+std::wstring const Tag::name_unknown_ = L"Unknown tag";
 
 Tag::Tag(unsigned char const *buffer) {
     tag_.push_back(*buffer);
