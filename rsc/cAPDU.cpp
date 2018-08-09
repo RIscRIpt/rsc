@@ -84,7 +84,7 @@ size_t cAPDU::lc_byte_count() {
     else if (Lc > 256)
         return 3;
     else
-        return 1;
+        return 1; // 256 == 0
 }
 
 scb::Bytes cAPDU::lc_bytes() {
@@ -111,7 +111,7 @@ size_t cAPDU::le_byte_count() {
     else if (Le > 256)
         return 2;
     else
-        return 1;
+        return 1; // 256 == 0
 }
 
 scb::Bytes rsc::cAPDU::le_bytes() {
@@ -133,7 +133,7 @@ scb::Bytes rsc::cAPDU::le_bytes() {
 
 cAPDU cAPDU::from_buffer(scb::Bytes const &buffer) {
     scb::Bytes data;
-    unsigned int Lc, Le;
+    unsigned int Lc = 0, Le = 0;
     unsigned char CLA, INS, P1, P2;
 
     scb::ByteStream bs(buffer);
@@ -142,26 +142,38 @@ cAPDU cAPDU::from_buffer(scb::Bytes const &buffer) {
     INS = bs.next_u8();
     P1 = bs.next_u8();
     P2 = bs.next_u8();
-    Lc = bs.next_u8();
-    if (Lc & 0x80) {
-        auto lbs = bs.next_bytes(Lc & 0x7F);
-        Lc = 0;
-        for (auto b : lbs) {
-            Lc <<= 8;
-            Lc |= b;
+    
+    if (!bs.eob()) {
+        Lc = bs.next_u8();
+        if (Lc & 0x80) {
+            auto lbs = bs.next_bytes(Lc & 0x7F);
+            Lc = 0;
+            for (auto b : lbs) {
+                Lc <<= 8;
+                Lc |= b;
+            }
         }
+    } else {
+        return cAPDU(CLA, INS, P1, P2);
     }
-    data = bs.next_bytes(Lc);
+
+    if (!bs.eob()) {
+        data = bs.next_bytes(Lc);
+    } else {
+        // Le = Lc;
+        // Lc = 0;
+        return cAPDU(CLA, INS, P1, P2, /*Le*/ Lc);
+    }
+
     if (!bs.eob()) {
         Le = bs.next_u8();
-        if (bs.eob()) {
-            if (Le == 0)
-                Le = 256;
-        } else {
+        if (!bs.eob()) {
             do {
                 Le <<= 8;
                 Le |= bs.next_u8();
             } while (!bs.eob());
+        } else if (Le == 0) {
+            Le = 256;
         }
         return cAPDU(CLA, INS, P1, P2, std::move(data), Le);
     } else {

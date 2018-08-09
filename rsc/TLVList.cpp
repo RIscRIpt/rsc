@@ -10,7 +10,7 @@ TLVList::TLVList(scb::Bytes::const_iterator buffer_begin, scb::Bytes::const_iter
     : std::vector<TLV>(std::move(from_bytes_range(buffer_begin, buffer_end)))
 {}
 
-std::vector<TLV> rsc::TLVList::from_bytes(scb::Bytes const & buffer) {
+std::vector<TLV> rsc::TLVList::from_bytes(scb::Bytes const &buffer) {
     std::vector<TLV> tlvs;
     size_t i = 0;
     do {
