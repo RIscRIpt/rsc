@@ -25,7 +25,7 @@ std::vector<std::wstring> const& Readers::fetch()
         throw std::system_error(result, std::system_category());
     for (LPTSTR pReader = mszReaders; *pReader; ) {
         readers_.emplace_back(pReader);
-        pReader += readers_.back().length();
+        pReader += readers_.back().length() + 1;
     }
     SCardFreeMemory(context, mszReaders);
     return readers_;
