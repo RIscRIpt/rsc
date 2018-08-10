@@ -202,8 +202,12 @@ cAPDU cAPDU::SELECT(scb::Bytes name, bool by_name, bool first) {
     return cAPDU(0x00, 0xA4, by_name ? 0x04 : 0x00, first ? 0x00 : 0x02, std::move(name), 256);
 }
 
-cAPDU rsc::cAPDU::GET_RESPONSE(unsigned int Le) {
+cAPDU cAPDU::GET_RESPONSE(unsigned int Le) {
     return cAPDU(0x00, 0xC0, 0x00, 0x00, Le);
+}
+
+cAPDU cAPDU::FIX_LENGTH(cAPDU const &capdu, unsigned int Le) {
+    return cAPDU(capdu.CLA, capdu.INS, capdu.P1, capdu.P2, capdu.data, Le);
 }
 
 std::ostream& operator<<(std::ostream &os, rsc::cAPDU const &capdu) {

@@ -37,6 +37,7 @@ namespace rsc {
 
         static cAPDU SELECT(scb::Bytes name, bool by_name = true, bool first = true);
         static cAPDU GET_RESPONSE(unsigned int Le);
+        static cAPDU FIX_LENGTH(cAPDU const &capdu, unsigned int Le);
 
     private:
         cAPDU from_buffer(scb::Bytes const &buffer);
