@@ -18,6 +18,7 @@ namespace rsc {
         inline uint8_t SW2() const noexcept { return value & 0xFF; }
 
         inline uint8_t response_bytes_still_available() const noexcept { if (SW1() == 0x61) return SW2(); return 0; }
+        inline bool wrong_length() const noexcept { return SW1() == 0x6C; }
     };
 
 }
