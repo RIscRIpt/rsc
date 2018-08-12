@@ -40,6 +40,9 @@
     <ClInclude Include="EventListener.h">
       <Filter>EventListener</Filter>
     </ClInclude>
+    <ClInclude Include="AccessStartedEventListener.h">
+      <Filter>EventListener</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Card.cpp">
@@ -76,6 +79,9 @@
       <Filter>TL</Filter>
     </ClCompile>
     <ClCompile Include="EventListener.cpp">
+      <Filter>EventListener</Filter>
+    </ClCompile>
+    <ClCompile Include="AccessStartedEventListener.cpp">
       <Filter>EventListener</Filter>
     </ClCompile>
   </ItemGroup>

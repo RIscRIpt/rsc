@@ -1,6 +1,7 @@
 #include "EventListener.h"
 
 #include "Readers.h"
+#include "AccessStartedEventListener.h"
 
 #include <system_error>
 
@@ -9,8 +10,8 @@ using namespace rsc;
 DWORD const EventListener::MAX_TIMEOUT = 1024;
 LPCTSTR EventListener::NEW_READER = TEXT("\\\\?PnP?\\Notification");
 
-EventListener::EventListener(Context const &context) 
-    : context(context)
+EventListener::EventListener(DWORD dwContextScope) 
+    : context_(dwContextScope, false)
     , newReaders_(true)
 {}
 
@@ -35,41 +36,72 @@ void EventListener::set_listening_readers(std::vector<std::wstring> const &reade
 
 void EventListener::listen_new_readers(bool toggle) {
     newReaders_ = toggle;
+    if (newReaders_) {
+        readers_.emplace(NEW_READER, SCARD_STATE_UNAWARE);
+    } else {
+        readers_.erase(NEW_READER);
+    }
 }
 
 void EventListener::listener() {
+    if (newReaders_) {
+        readers_.emplace(NEW_READER, SCARD_STATE_UNAWARE);
+    }
+
+    AccessStartedEventListener asel;
+
     while (toListen_) {
-        auto readerStates = get_reader_states();
-        auto result = SCardGetStatusChange(
-            context,
-            MAX_TIMEOUT,
-            readerStates.data(),
-            readerStates.size()
-        );
-        switch (result) {
-            case SCARD_S_SUCCESS:
-                process_reader_states(readerStates);
-                break;
-            case SCARD_E_TIMEOUT:
-                break;
-            default:
-                throw std::system_error(result, std::generic_category());
+        try {
+            if (context_.released()) {
+                while (toListen_ && !asel.wait(MAX_TIMEOUT))
+                    ;
+
+                if (!toListen_)
+                    break;
+
+                context_.establish();
+            }
+
+            auto readerStates = get_reader_states();
+
+            auto result = SCardGetStatusChange(
+                context_,
+                MAX_TIMEOUT,
+                readerStates.data(),
+                readerStates.size()
+            );
+
+            switch (result) {
+                case SCARD_S_SUCCESS:
+                    process_reader_states(readerStates);
+                    break;
+                case SCARD_E_TIMEOUT:
+                    break;
+                case SCARD_E_SERVICE_STOPPED:
+                    context_.release();
+                    break;
+                default:
+                    throw std::system_error(result, std::generic_category());
+            }
+
+        } catch (std::system_error const &e) {
+            if (e.code().value() == SCARD_E_SERVICE_STOPPED) {
+                context_.release();
+            } else {
+                throw;
+            }
         }
     }
 
 }
 
 std::vector<SCARD_READERSTATE> EventListener::get_reader_states() {
-    std::vector<SCARD_READERSTATE> readerStates(readers_.size() + newReaders_);
+    std::vector<SCARD_READERSTATE> readerStates(readers_.size());
     size_t i = 0;
     for (auto reader = readers_.begin(); reader != readers_.end(); ++reader, i++) {
         auto &state = readerStates[i];
         state.szReader = reader->first.c_str();
         state.dwCurrentState = reader->second;
-    }
-    if (newReaders_) {
-        auto &state = readerStates.back();
-        state.szReader = NEW_READER;
     }
     return readerStates;
 }
@@ -77,6 +109,11 @@ std::vector<SCARD_READERSTATE> EventListener::get_reader_states() {
 void EventListener::process_reader_states(std::vector<SCARD_READERSTATE> &readerStates) {
     bool updateReaders = false;
     for (auto const &readerState : readerStates) {
+        update_current_state(readerState);
+
+        if (event_bits(readerState, SCARD_STATE_IGNORE))
+            continue;
+
         if (!wcscmp(readerState.szReader, NEW_READER)) {
             updateReaders = true;
             continue;
@@ -87,18 +124,13 @@ void EventListener::process_reader_states(std::vector<SCARD_READERSTATE> &reader
             continue;
         }
 
-        if (event_bits(readerState, SCARD_STATE_IGNORE))
-            continue;
-
         if (filtered_event_occured(readerState)) {
-            callback_(readerState.dwEventState & eventFilter_, readerState.szReader);
+            callback_(readerState.dwEventState & eventFilter_, context_, readerState.szReader);
         }
-
-        update_current_state(readerState);
     }
 
     if (updateReaders) {
-        Readers readers(context, NULL);
+        Readers readers(context_, NULL);
         for (auto const &new_reader : readers.list()) {
             if (readers_.count(new_reader) == 0) {
                 readers_.emplace(new_reader, SCARD_STATE_UNAWARE);

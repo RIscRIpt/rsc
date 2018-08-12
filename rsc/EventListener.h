@@ -13,9 +13,9 @@ namespace rsc {
 
     class EventListener {
     public:
-        using CallbackFn = std::function<void(DWORD event, std::wstring const &reader)>;
+        using CallbackFn = std::function<void(DWORD event, Context const &context, std::wstring const &reader)>;
 
-        EventListener(Context const &context);
+        EventListener(DWORD dwContextScope = SCARD_SCOPE_USER);
 
         void start(DWORD eventFilter, CallbackFn callback);
         void stop();
@@ -23,7 +23,7 @@ namespace rsc {
         void set_listening_readers(std::vector<std::wstring> const &readers);
         void listen_new_readers(bool toggle);
 
-        Context const &context;
+        inline Context const& context() const noexcept { return context_; }
 
     private:
         void listener();
@@ -34,6 +34,8 @@ namespace rsc {
         void update_current_state(SCARD_READERSTATE const &state);
 
         static bool event_bits(SCARD_READERSTATE const &state, DWORD bits);
+
+        Context context_;
 
         std::thread listeningThread_;
         bool toListen_;

@@ -22,11 +22,16 @@ std::vector<std::wstring> const& Readers::fetch()
             &cchReaders
             ); result != SCARD_S_SUCCESS
         )
-        throw std::system_error(result, std::system_category());
-    for (LPTSTR pReader = mszReaders; *pReader; ) {
-        readers_.emplace_back(pReader);
-        pReader += readers_.back().length() + 1;
+    {
+        if (result != SCARD_E_SERVICE_STOPPED)
+            throw std::system_error(result, std::system_category());
     }
-    SCardFreeMemory(context, mszReaders);
+    if (mszReaders) {
+        for (LPTSTR pReader = mszReaders; *pReader; ) {
+            readers_.emplace_back(pReader);
+            pReader += readers_.back().length() + 1;
+        }
+        SCardFreeMemory(context, mszReaders);
+    }
     return readers_;
 }

@@ -144,6 +144,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="AccessStartedEventListener.h" />
     <ClInclude Include="cAPDU.h" />
     <ClInclude Include="Card.h" />
     <ClInclude Include="Context.h" />
@@ -159,6 +160,7 @@
     <ClInclude Include="TLVList.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AccessStartedEventListener.cpp" />
     <ClCompile Include="cAPDU.cpp" />
     <ClCompile Include="Card.cpp" />
     <ClCompile Include="Context.cpp" />
