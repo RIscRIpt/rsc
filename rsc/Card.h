@@ -29,6 +29,7 @@ namespace rsc {
         rAPDU raw_transmit(cAPDU const &capdu);
         rAPDU transmit(cAPDU const &capdu);
         void fetch_status();
+        bool belongs_to(std::wstring const &reader);
 
         void set_trace(std::ostream *output = &std::cout) noexcept;
 

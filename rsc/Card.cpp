@@ -144,6 +144,14 @@ void Card::fetch_status() {
         throw std::system_error(result, std::system_category());
 }
 
+bool Card::belongs_to(std::wstring const &r) {
+    for (auto const &reader : readerNames_) {
+        if (reader == r)
+            return true;
+    }
+    return false;
+}
+
 void Card::set_trace(std::ostream *output) noexcept {
     trace_ = output;
 }
