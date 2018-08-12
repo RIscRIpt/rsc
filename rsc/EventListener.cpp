@@ -116,6 +116,7 @@ void EventListener::process_reader_states(std::vector<SCARD_READERSTATE> &reader
 
         if (!wcscmp(readerState.szReader, NEW_READER)) {
             updateReaders = true;
+            callback_(0, context_, NEW_READER);
             continue;
         }
 

@@ -25,6 +25,8 @@ namespace rsc {
 
         inline Context const& context() const noexcept { return context_; }
 
+        static LPCTSTR NEW_READER;
+
     private:
         void listener();
         std::vector<SCARD_READERSTATE> get_reader_states();
@@ -47,7 +49,6 @@ namespace rsc {
         std::unordered_map<std::wstring, DWORD> readers_;
 
         static DWORD const MAX_TIMEOUT;
-        static LPCTSTR NEW_READER;
     };
 
 }
