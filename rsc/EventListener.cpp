@@ -133,7 +133,7 @@ void EventListener::process_reader_states(std::vector<SCARD_READERSTATE> &reader
         Readers readers(context_, NULL);
         for (auto const &new_reader : readers.list()) {
             if (readers_.count(new_reader) == 0) {
-                readers_.emplace(new_reader, SCARD_STATE_UNAWARE);
+                readers_.emplace(new_reader, SCARD_STATE_EMPTY);
             }
         }
     }
