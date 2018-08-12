@@ -160,9 +160,11 @@ cAPDU cAPDU::from_buffer(scb::Bytes const &buffer) {
     if (!bs.eob()) {
         data = bs.next_bytes(Lc);
     } else {
-        // Le = Lc;
-        // Lc = 0;
-        return cAPDU(CLA, INS, P1, P2, /*Le*/ Lc);
+        Le = Lc;
+        Lc = 0;
+        if (Le == 0)
+            Le = 256;
+        return cAPDU(CLA, INS, P1, P2, Le);
     }
 
     if (!bs.eob()) {
