@@ -37,6 +37,9 @@
     <ClInclude Include="SW.h">
       <Filter>SW</Filter>
     </ClInclude>
+    <ClInclude Include="EventListener.h">
+      <Filter>EventListener</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Card.cpp">
@@ -72,6 +75,9 @@
     <ClCompile Include="TL.cpp">
       <Filter>TL</Filter>
     </ClCompile>
+    <ClCompile Include="EventListener.cpp">
+      <Filter>EventListener</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Card">
@@ -100,6 +106,9 @@
     </Filter>
     <Filter Include="SW">
       <UniqueIdentifier>{bef28ef9-a4ae-46a5-8680-481220bddb2a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="EventListener">
+      <UniqueIdentifier>{f4c3afaf-c667-4572-94e2-cff73d8aa14b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

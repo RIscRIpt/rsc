@@ -147,6 +147,7 @@
     <ClInclude Include="cAPDU.h" />
     <ClInclude Include="Card.h" />
     <ClInclude Include="Context.h" />
+    <ClInclude Include="EventListener.h" />
     <ClInclude Include="Length.h" />
     <ClInclude Include="rAPDU.h" />
     <ClInclude Include="Readers.h" />
@@ -161,6 +162,7 @@
     <ClCompile Include="cAPDU.cpp" />
     <ClCompile Include="Card.cpp" />
     <ClCompile Include="Context.cpp" />
+    <ClCompile Include="EventListener.cpp" />
     <ClCompile Include="Length.cpp" />
     <ClCompile Include="rAPDU.cpp" />
     <ClCompile Include="Readers.cpp" />
