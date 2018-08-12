@@ -107,7 +107,7 @@ rAPDU Card::transmit(cAPDU const &capdu) {
     rAPDU result;
     result = raw_transmit(capdu);
     if (result.SW().response_bytes_still_available()) {
-        result = raw_transmit(cAPDU(0x00, 0xC0, 0x00, 0x00, result.SW().response_bytes_still_available()));
+        result = raw_transmit(cAPDU::GET_RESPONSE(result.SW().response_bytes_still_available()));
     }
     return result;
 }
