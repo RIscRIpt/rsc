@@ -11,19 +11,7 @@ Card::Card(Context const &context, LPCTSTR szReader)
     , dwActiveProtocol_(SCARD_PROTOCOL_UNDEFINED)
     , dwState_(SCARD_UNKNOWN)
     , trace_(nullptr)
-{}
-
-Card::Card(Context const &context, std::wstring const &reader)
-    : Card(context, reader.c_str())
-{}
-
-Card::~Card() {
-    disconnect();
-}
-
-void Card::connect() {
-    if (hCard_)
-        disconnect();
+{
     if (
         auto result = SCardConnect(
             context,
@@ -36,6 +24,14 @@ void Card::connect() {
         )
         throw std::system_error(result, std::system_category());
     fetch_status();
+}
+
+Card::Card(Context const &context, std::wstring const &reader)
+    : Card(context, reader.c_str())
+{}
+
+Card::~Card() {
+    disconnect();
 }
 
 void Card::disconnect() {

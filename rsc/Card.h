@@ -19,7 +19,6 @@ namespace rsc {
         Card(Context const &context, std::wstring const &reader);
         ~Card();
 
-        void connect();
         void disconnect();
 
         LPCSCARD_IO_REQUEST pci() const noexcept;
