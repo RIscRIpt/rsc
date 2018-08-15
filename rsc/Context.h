@@ -18,6 +18,7 @@ namespace rsc {
         void establish();
         void release();
 
+        inline bool established() const noexcept { return hContext_ != NULL; }
         inline bool released() const noexcept { return hContext_ == NULL; }
         inline SCARDCONTEXT handle() const noexcept { return hContext_; }
         inline operator SCARDCONTEXT() const noexcept { return hContext_; }
