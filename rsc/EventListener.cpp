@@ -15,9 +15,9 @@ EventListener::EventListener(DWORD dwContextScope)
     , newReaders_(true)
 {}
 
-void EventListener::start(DWORD eventFilter, CallbackFn callback) {
+void EventListener::start(DWORD eventFilter, ReaderEventCbFn callback) {
     eventFilter_ = eventFilter;
-    callback_ = callback;
+    readerEventCb_ = callback;
     toListen_ = true;
     listeningThread_ = std::thread(std::bind(&EventListener::listener, this));
 }
@@ -116,7 +116,7 @@ void EventListener::process_reader_states(std::vector<SCARD_READERSTATE> &reader
 
         if (!wcscmp(readerState.szReader, NEW_READER)) {
             updateReaders = true;
-            callback_(0, context_, NEW_READER);
+            readerEventCb_(0, context_, NEW_READER);
             continue;
         }
 
@@ -126,7 +126,7 @@ void EventListener::process_reader_states(std::vector<SCARD_READERSTATE> &reader
         }
 
         if (filtered_event_occured(readerState)) {
-            callback_(readerState.dwEventState & eventFilter_, context_, readerState.szReader);
+            readerEventCb_(readerState.dwEventState & eventFilter_, context_, readerState.szReader);
         }
     }
 
