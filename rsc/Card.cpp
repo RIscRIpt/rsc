@@ -76,17 +76,17 @@ void Card::reset(DWORD dwInitialization) {
         throw std::system_error(result, std::system_category());
 }
 
-rAPDU Card::raw_transmit(cAPDU const &capdu) {
+rAPDU Card::raw_transmit(scb::Bytes const &buffer) {
     if (trace_)
-        *trace_ << "< " << capdu << "\r\n";
+        *trace_ << "< " << buffer << "\r\n";
     rAPDU rapdu;
     DWORD actual_length = static_cast<DWORD>(rapdu.buffer().size());
     if (
         auto result = SCardTransmit(
             hCard_,
             pci(),
-            capdu.buffer().data(),
-            static_cast<DWORD>(capdu.buffer().size()),
+            buffer.data(),
+            static_cast<DWORD>(buffer.size()),
             NULL,
             rapdu.buffer().data(),
             &actual_length
@@ -97,6 +97,10 @@ rAPDU Card::raw_transmit(cAPDU const &capdu) {
     if (trace_)
         *trace_ << "> " << rapdu << "\r\n";
     return rapdu;
+}
+
+rAPDU Card::raw_transmit(cAPDU const &capdu) {
+    return raw_transmit(capdu.buffer());
 }
 
 rAPDU Card::transmit(cAPDU const &capdu) {

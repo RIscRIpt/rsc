@@ -25,6 +25,7 @@ namespace rsc {
 
         void warm_reset();
         void cold_reset();
+        rAPDU raw_transmit(scb::Bytes const &buffer);
         rAPDU raw_transmit(cAPDU const &capdu);
         rAPDU transmit(cAPDU const &capdu);
         void fetch_status();
