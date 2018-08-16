@@ -68,7 +68,7 @@ void EventListener::listener() {
                 context_,
                 MAX_TIMEOUT,
                 readerStates.data(),
-                readerStates.size()
+                static_cast<DWORD>(readerStates.size())
             );
 
             switch (result) {
