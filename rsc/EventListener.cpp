@@ -7,7 +7,7 @@
 
 using namespace rsc;
 
-DWORD const EventListener::MAX_TIMEOUT = 1024;
+DWORD const EventListener::MAX_TIMEOUT = INFINITE;
 LPCTSTR EventListener::NEW_READER = TEXT("\\\\?PnP?\\Notification");
 
 EventListener::EventListener(DWORD dwContextScope) 
@@ -24,6 +24,7 @@ void EventListener::start(DWORD eventFilter, ReaderEventCbFn callback) {
 
 void EventListener::stop() {
     toListen_ = false;
+    context_.release(); // speed up thread termination (don't wait for timeout)
     listeningThread_.join();
 }
 
@@ -85,10 +86,16 @@ void EventListener::listener() {
             }
 
         } catch (std::system_error const &e) {
-            if (e.code().value() == SCARD_E_SERVICE_STOPPED) {
-                context_.release();
-            } else {
-                throw;
+            switch (e.code().value()) {
+                case SCARD_E_SERVICE_STOPPED:
+                    context_.release();
+                    break;
+                case SCARD_E_CANCELLED:
+                    if (!toListen_) // when stop() is called
+                        break;
+                    // yes, no break;
+                default:
+                    throw;
             }
         }
     }
