@@ -36,7 +36,10 @@ Card::~Card() {
 
 void Card::disconnect() {
     if (hCard_) {
-        if (auto result = SCardDisconnect(hCard_, SCARD_RESET_CARD); result != SCARD_S_SUCCESS)
+        if (
+            auto result = SCardDisconnect(hCard_, SCARD_RESET_CARD);
+            result != SCARD_S_SUCCESS && result != ERROR_INVALID_HANDLE
+            )
             throw std::system_error(result, std::system_category());
         hCard_ = NULL;
     }
