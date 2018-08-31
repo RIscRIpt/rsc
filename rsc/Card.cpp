@@ -116,10 +116,10 @@ rAPDU Card::transmit(cAPDU const &capdu) {
 }
 
 void Card::fetch_status() {
+    atr_ = scb::Bytes(32);
     LPTSTR mszReaderNames;
     DWORD cchReaderLen = SCARD_AUTOALLOCATE;
-    DWORD cbAtrLen;
-    atr_ = scb::Bytes(32);
+    DWORD cbAtrLen = atr_.size();
     if (
         auto result = SCardStatus(
             hCard_,
